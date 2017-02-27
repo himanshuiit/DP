@@ -1,0 +1,33 @@
+#include<bits/stdc++.h>
+using namespace std;
+class  ZigZag
+{
+  public:
+       int longestZigZag(vector <int> sequence)
+  {
+         int peak_table[100],non-peak_table[100];
+         int siz=sequence.size();
+         peak_table[0]=1;
+         non-peak_table[0]=1;
+      for(int i=1;i<siz;i++)
+          {
+             peak_table[i]=1;
+             non-peak_table[i]=1;
+             for(int j=i-1;j>=0;j--)
+             {
+                  if(sequence[i]< sequence[j])
+                     peak_table[i]=max(peak_table[i],1+non-peak_table[j]);
+                  if(sequence[i]>sequence[j])
+                    non-peak_table[i]=max(non-peak_table[i],1+peak_table[j]);
+
+             }
+
+          }
+      return max(peak_table[siz-1],non-peak_table[siz-1]);
+
+
+
+  }
+
+
+};
