@@ -1,0 +1,156 @@
+# Question 1
+
+#include<bits/stdc++.h>
+using namespace std;
+int a[10];
+class AvoidRoads
+{
+   public:
+       	long long numWays(int width, int height,vector<string> bad)
+       	{
+
+      long long dp[102][102];
+      short mark[103][103][2];
+      int a[4];
+      int si=bad.size();
+ for(int k=0;k<si;k++)
+ {
+      a[0]=a[1]=a[2]=a[3]=0;
+     string z=bad[k];
+     int s=z.length();
+     int j=0;
+    for(int i=0;i<s;i++)
+    {
+        char c=z[i];
+        if(c==' ')
+        j++;
+        else a[j]=a[j]*10+(c-'0');
+    }
+    if((a[0]-a[2])==0) //up 1,same width
+    {
+        if(a[1]>a[3])
+            mark[a[2]][a[3]][1]=1;
+        else mark[a[0]][a[1]][1]=1;
+    }
+    else  // left,same height
+    {
+        if(a[0]>a[2])
+            mark[a[2]][a[3]][0]=1;
+        else
+            mark[a[0]][a[1]][0]=1;
+    }
+
+ }
+
+    dp[0][0]=1;
+    for(int i=0;i<=width;i++)
+    {
+        for(int j=0;j<=height;j++)
+        {
+            if(i-1>=0 && mark[i-1][j][0]==0)
+              dp[i][j]=dp[i-1][j];
+            if(j-1>=0 && mark[i][j-1][1]==0)
+                dp[i][j]+=dp[i][j-1];
+        }
+    }
+    return dp[width][height];
+       	}
+
+};
+
+
+# Question 2
+
+#include<bits/stdc++.h>
+using namespace std;
+class  ZigZag
+{
+  public:
+       int longestZigZag(vector <int> sequence)
+  {
+         int dp1[100],dp2[100];
+         int siz=sequence.size();
+         dp1[0]=1;
+         dp2[0]=1;
+      for(int i=1;i<siz;i++)
+          {
+             dp1[i]=1;
+             dp2[i]=1;
+             for(int j=i-1;j>=0;j--)
+             {
+                  if(sequence[i]< sequence[j])
+                     dp1[i]=max(dp1[i],1+dp2[j]);
+                  if(sequence[i]>sequence[j])
+                    dp2[i]=max(dp2[i],1+dp1[j]);
+
+             }
+
+          }
+      return max(dp1[siz-1],dp2[siz-1]);
+
+
+
+  }
+
+
+};
+
+
+# Question 3
+
+#include<bits/stdc++.h>
+using namespace std;
+ 
+int ceilIndex(int t[],int l,int r,int key) {
+    int m;
+    while(r-l>1) {
+        m=l+(r-l)/2;
+        (t[m]>=key?r:l)=m;
+    }
+    return r;
+}
+int lis(int arr[],int n) {
+    int temp[n];
+    int max_len=1;
+    for(int j=0;j<n;j++) {
+        for(int i=0;i<n;i++) {
+            temp[i]=0;
+        }
+        temp[0]=arr[j];
+        int len=1;
+        for(int i=(j+1);i<(j+n);i++) {
+            if(arr[i]<temp[0]) {
+                temp[0]=arr[i];
+            }
+            else if(arr[i]>temp[len-1]) {
+                temp[len++]=arr[i];
+            }
+            else {
+                temp[ceilIndex(temp,-1,len-1,arr[i])]=arr[i];
+            }
+        }
+        if(len>max_len) {
+            max_len=len;
+        }
+    }
+    return max_len;
+}
+ 
+int main() {
+    ios::sync_with_stdio(false);
+    int n,t;
+    cin>>t;
+    while(t--) {
+            cin>>n;
+            int arr[2*n];
+            for(int i=0;i<n;i++) {
+                cin>>arr[i];
+                arr[i+n]=arr[i];
+            }
+            cout<<"\n"<<lis(arr,n);
+            /*for(int i=0;i<2*n;i++) {
+                cout<<"\t"<<arr[i];
+            }*/
+    }
+    return 0;
+}
